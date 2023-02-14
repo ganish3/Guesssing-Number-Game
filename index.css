@@ -1,0 +1,23 @@
+.parentDiv {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    left: 640px;
+    top: 150px;
+}
+.childDiv{
+    align-items: center;
+}
+
+.visible{
+    visibility: hidden;
+}
+#gameIn{
+    visibility: hidden;
+}
+.wel {
+    position: absolute;
+    left: 33rem;
+    font-size: larger;
+    top: 4rem;
+}

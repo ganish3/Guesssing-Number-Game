@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Number Game</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="wel"><h2>Welcome to Guessing number game</h2></div>
+    <div class="parentDiv">
+      <div class="childDiv"><h3>NEW GAME</h3></div>
+      <div>
+        <div><input type="text" placeholder="Enter your name" id="name" /></div>
+      </div>
+      <div class="childDiv"><button onclick="gameStart()">GO!</button></div>
+
+      <p id="welcome"></p>
+      <div id="gameIn">
+        <input type="number" id="int" placeholder="Enter 4 digits" />
+        <button onclick="validate()">Validate</button>
+      </div>
+
+      <p id="result"></p>
+      <p id="attempt"></p>
+      <p id="timing"></p>
+    
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
