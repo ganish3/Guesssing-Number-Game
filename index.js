@@ -27,12 +27,10 @@ const validate = () => {
     ...new Set(numbers.filter((n, i) => numbers.indexOf(n) !== i)),
   ];
 
-  console.log(duplicates);
   if (duplicates.length) {
     alert("Dont enter same number again");
   } else {
     let finalValue = compareArrays(arr1, numbers);
-    console.log(finalValue);
     document.getElementById("result").innerHTML =
       "Your Result is " + finalValue;
 
@@ -62,15 +60,16 @@ const validate = () => {
 };
 
 function compareArrays(arr1, arr2) {
-  let plus = "";
-  let minus = "";
+  let emptArr = [];
   for (let i = 0; i < arr1.length; i++) {
     if (arr1[i] === arr2[i]) {
-      plus += "+";
-    } else if (arr2.includes(arr1[i])) {
-      minus += "-";
+      emptArr.push("+");
+    } else if (arr1.includes(arr2[i])) {
+      emptArr.push("-");
+    } else {
+      emptArr.push("*");
     }
   }
   console.log(arr1, arr2);
-  return plus + minus;
+  return emptArr.join("");
 }
