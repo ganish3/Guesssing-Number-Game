@@ -7,6 +7,8 @@ const gameStart = () => {
     document.getElementById("gameIn").style.visibility = "visible";
     localStorage.setItem("starting", new Date());
     localStorage.removeItem('player');
+    localStorage.removeItem("starting");
+    localStorage.removeItem("ending");
     const data = localStorage.data ? JSON.parse(localStorage.data) : [];
     const check = data.filter((item) => item.name === name)
     if (check && check.length > 0) {
