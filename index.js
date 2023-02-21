@@ -18,7 +18,7 @@ const gameStart = () => {
         }
         localStorage.setItem('data', JSON.stringify([...data, obj]))
     }
-
+    updateTable()
 };
 function random4Digit() {
     return shuffle("0123456789".split("")).join("").substring(0, 4);
@@ -36,7 +36,7 @@ let arr1 = random4Digit().split("");
 
 const validate = () => {
     const numbers = document.getElementById("int").value.split("");
-    [6, 7, 7, 9]
+    
     const duplicates = [
         ...new Set(numbers.filter((n, i) => numbers.indexOf(n) !== i)),
     ];
@@ -44,7 +44,9 @@ const validate = () => {
     if (duplicates.length) {
         alert("Dont enter same number again");
     } else {
+        const data = localStorage.data ? JSON.parse(localStorage.data) : [];
         let finalValue = compareArrays(arr1, numbers);
+        let name = document.getElementById("name").value;
         document.getElementById("result").innerHTML =
             "Your Result is " + finalValue;
         // let jsonObj = JSON.parse(localStorage.player)
@@ -56,18 +58,22 @@ const validate = () => {
             let date2 = new Date(localStorage.ending);
             const diffInMs = date2 - date1;
             const diffInMin = Math.floor(diffInMs / (1000 * 60));
-            document.getElementById("timing").innerHTML =
-                " Your best time is " + diffInMin + " minutes";
+            document.getElementById("timing").innerHTML = " Your best time is " + diffInMin + " minutes";
+            const updateData = data.map((item) => {
+                if (item.name === name) {
+                    item.bestTime = diffInMin
+                }
+                return item
+            })
+            localStorage.setItem('data', JSON.stringify(updateData))
         }
-        const data = localStorage.data ? JSON.parse(localStorage.data) : [];
         const temp = data.map((item) => {
-            let name = document.getElementById("name").value;
             if (item.name === name) {
                 item.attempt = item.attempt + 1
             }
             return item
         })
-        localStorage.setItem('data',JSON.stringify(temp))
+        localStorage.setItem('data', JSON.stringify(temp))
         if (localStorage.player && localStorage.player.length > 0) {
             let player = JSON.parse(localStorage.player);
             let obj = { attempt: +player.attempt + 1, name: localStorage.name };
@@ -80,6 +86,7 @@ const validate = () => {
             localStorage.setItem("player", JSON.stringify(obj));
         }
     }
+    updateTable()
 };
 
 function compareArrays(arr1, arr2) {
@@ -98,3 +105,16 @@ function compareArrays(arr1, arr2) {
 }
 
 localStorage.removeItem("player")
+
+const updateTable = () => {
+    let finalArr = JSON.parse(localStorage.getItem("data"));
+    let displayName = finalArr.map((element) => {
+        return `<tr>
+          <td>${element.name}</td>
+          <td>${element.attempt}</td>
+          <td>${element.bestTime !== undefined ? element.bestTime : '-'}</td>
+          </tr>`
+    })
+    document.getElementById("tableDyn").innerHTML = displayName;
+}
+updateTable()
