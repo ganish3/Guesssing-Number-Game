@@ -24,17 +24,22 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY_BASELINE }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY_BASELINE }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets[format('SERVER_HOST_{0}', matrix.server)] }} >> ~/.ssh/known_hosts
 
-      # Deploy to each server
-      - name: Deploy to server
+        # Test SSH Connection
+      - name: Test SSH Connection
         run: |
-          ssh ${{ secrets.SERVER_USER_BASELINE }}@${{ secrets[format('SERVER_HOST_{0}', matrix.server)] }} << 'EOF'
-            cd /home/deploy_test
+            ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER_BASELINE }}@${{ secrets.SERVER_HOST_BASELINE }} "echo Connection successful"
+
+      # Deploy to each server
+    #   - name: Deploy to server
+    #     run: |
+    #       ssh ${{ secrets.SERVER_USER_BASELINE }}@${{ secrets[format('SERVER_HOST_{0}', matrix.server)] }} << 'EOF'
+    #         cd /home/deploy_test
   
-            mkdir auto_deploy_test
-          EOF
+    #         mkdir auto_deploy_test
+    #       EOF
             
 
