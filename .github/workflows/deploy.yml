@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        server: 
+        server:
           - BASELINE
 
     steps:
@@ -20,16 +20,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Deploy to each server in the matrix
+      # Set up SSH agent
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_BASELINE }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets[format('SERVER_HOST_{0}', matrix.server)] }} >> ~/.ssh/known_hosts
+
+      # Deploy to each server
       - name: Deploy to server
-        uses: appleboy/ssh-action@v0.1.5
-        with:
-          host: ${{ secrets[format('SERVER_HOST_{0}', matrix.server)] }} # Adjust to use matrix values
-          username: ${{ secrets.SERVER_USER_BASELINE }}
-          key: ${{ secrets.SSH_PRIVATE_KEY_BASELINE }}
-          passphrase: ${{ secrets.SERVER_PASSPHRASE_BASELINE }}
-          script: |
+        run: |
+          ssh ${{ secrets.SERVER_USER_BASELINE }}@${{ secrets[format('SERVER_HOST_{0}', matrix.server)] }} << 'EOF'
             cd /home/deploy_test
   
             mkdir auto_deploy_test
+          EOF
+            
 
