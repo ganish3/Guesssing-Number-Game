@@ -1,0 +1,35 @@
+name: Conditional Auto Deploy on Baseline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    if: contains(github.event.head_commit.message, '#deploy')  # Check for the specific flag in commit message
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        server: 
+          - BASELINE
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Deploy to each server in the matrix
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets[format('SERVER_HOST_{0}', matrix.server)] }} # Adjust to use matrix values
+          username: ${{ secrets.SERVER_USER_BASELINE }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_BASELINE }}
+          passphrase: ${{ secrets.SERVER_PASSPHRASE_BASELINE }}
+          script: |
+            cd /home/deploy_test
+  
+            mkdir auto_deploy_test
+
