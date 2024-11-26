@@ -15,25 +15,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Set up SSH key
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SECRET_PEM_KEY_BASELINE }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-      # Start SSH agent and add private key
-      - name: Start SSH agent and add private key
-        env:
-          SSH_PASSPHRASE: ${{ secrets.SERVER_PASSPHRASE_BASELINE }}
-        run: |
-          eval "$(ssh-agent -s)"
-          echo "$SSH_PASSPHRASE" | ssh-add ~/.ssh/id_rsa
-
-      # Add server to known hosts
-      - name: Add server to known hosts
-        run: ssh-keyscan -H ${{ secrets.SERVER_HOST_BASELINE }} >> ~/.ssh/known_hosts
-
       # Test SSH Connection
       - name: Test SSH Connection with Debugging
         run: ssh -v -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER_BASELINE }}@${{ secrets.SERVER_HOST_BASELINE }} "echo Connection successful"
