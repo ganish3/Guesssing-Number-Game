@@ -33,4 +33,4 @@ jobs:
       # Test SSH Connection with Debugging 
       - name: Test SSH Connection with Debugging 
         run: | 
-          ssh -vvv -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER_BASELINE }}@${{ secrets.SERVER_HOST_BASELINE }} "echo Connection successful"  
+          ssh -vvv -i ${{ secrets.SSH_PRIVATE_KEY_BASELINE }} -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER_BASELINE }}@${{ secrets.SERVER_HOST_BASELINE }} "echo Connection successful"  
