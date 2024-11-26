@@ -19,14 +19,14 @@ jobs:
       - name: Set up SSH key and passphrase
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SECRET_PEM_KEY_BASELINE }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_KEY_CHIRP }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
           # Start the SSH agent
           eval "$(ssh-agent -s)"
 
           # Add the private key with the passphrase
-          echo "${{ secrets.SERVER_PASSPHRASE_BASELINE }}" | ssh-add <(echo "${{ secrets.SERVER_SECRET_PEM_KEY_BASELINE }}")
+          echo "${{ secrets.SERVER_PASSPHRASE_BASELINE }}" | ssh-add <(echo "${{ secrets.SSH_KEY_CHIRP }}")
 
           # Add GitHub Actions known_hosts (to skip host verification)
           mkdir -p ~/.ssh
