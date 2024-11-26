@@ -15,6 +15,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # Setup SSH key from secrets
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_BASELINE }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
       # Test SSH Connection
       - name: Test SSH Connection with Debugging
-        run: ssh -v -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER_BASELINE }}@${{ secrets.SERVER_HOST_BASELINE }} "echo Connection successful"
+        run: |
+          ssh -v -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER_BASELINE }}@${{ secrets.SERVER_HOST_BASELINE }} "echo Connection successful"
